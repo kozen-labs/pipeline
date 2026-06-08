@@ -1,0 +1,59 @@
+{
+    "name": "MongoDB Atlas Demo",
+    "description": "Template to set up a basic MongoDB Atlas environment with Kubernetes for testing and development purposes. Provides a standard M10 AWS-based replica set in US East region and a Kubernetes deployment.",
+    "version": "1.0.0",
+    "engine": "1.0.0",
+    "release": "20250701",
+    "requires": [
+        { "key": "AtlasCredentials", "provider": "aws", "type": "secret" }
+    ],
+    "deploymentMode": "synchronous",
+    "components": [
+        {
+            "type": "Kubernetes",
+            "region": "west-us",
+            "instances": 2,
+            "gitHubUrl": "https://github.com/mongodb-industry-solutions/kozen",
+            "dockerFilePath": "./iac/",
+            "output": [
+                { "name": "k8IpAddress", "description": "container public ip" }
+            ]
+        },
+        {
+            "type": "Atlas",
+            "region": "us-east-1",
+            "config": {
+                "name": "kozen-test-cluster",
+                "clusterType": "REPLICASET",
+                "replicationSpecs": [{
+                    "numShards": 1,
+                    "regionsConfigs": [{
+                        "regionName": "US_EAST_1",
+                        "electableNodes": 3,
+                        "priority": 7,
+                        "readOnlyNodes": 0
+                    }]
+                }],
+                "cloudBackup": true,
+                "autoScalingDiskGbEnabled": true,
+                "mongoDbMajorVersion": "8.0",
+                "providerName": "AWS",
+                "providerInstanceSizeName": "M10"
+            },
+            "input": [
+                {
+                    "name": "ipAddress",
+                    "description": "ip address to include in the white list",
+                    "source": {
+                        "component": "Kubernetes",
+                        "output": "k8IpAddress"
+                    }
+                }
+            ],
+            "output": [
+                { "name": "connectionString", "description": "MongoDB connection string for the deployed cluster" },
+                { "name": "clusterEndpoint", "description": "Public endpoint of the Atlas cluster" }
+            ]
+        }
+    ]
+}

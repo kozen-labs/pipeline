@@ -1,0 +1,53 @@
+{
+  "name": "Ditto Basic",
+  "description": "Template to set up a testing environment for verifying Ditto's compatibility with MongoDB Atlas. It covers all necessary steps to evaluate real-time data synchronization via Ditto's peer-to-peer protocols and integration with MongoDB as the central data store.",
+  "version": "1.0.0",
+  "engine": "1.0.0",
+  "release": "20250407",
+  "requires": [
+    { "key": "MyClusterSecret", "provider": "aws", "type": "secret" }
+  ],
+  "deploymentMode": "synchronous",
+  "components": [
+    {
+      "name": "Kubernetes",
+      "region": "west-us",
+      "instances": 2,
+      "gitHubUrl": "https://github.com/mongodb-industry-solutions/kozen",
+      "dockerFilePath": "./iac/",
+      "output": [
+        { "name": "k8IpAddress", "description": "container public ip" }
+      ]
+    },
+    {
+      "name": "Atlas",
+      "region": "west-us",
+      "clusterType": "REPLICASET",
+      "replicationSpecs": [
+        {
+          "numShards": 1,
+          "regionsConfigs": [
+            {
+              "regionName": "US_EAST_1",
+              "electableNodes": 3,
+              "priority": 7,
+              "readOnlyNodes": 0
+            }
+          ]
+        }
+      ],
+      "cloudBackup": true,
+      "autoScalingDiskGbEnabled": true,
+      "mongoDbMajorVersion": "8.0",
+      "providerName": "AWS",
+      "providerInstanceSizeName": "M10",
+      "input": [
+        {
+          "name": "ipAddress",
+          "description": "ip address to include in the white list"
+        }
+      ],
+      "output": [{ "name": "ipAddress", "description": "container public ip" }]
+    }
+  ]
+}

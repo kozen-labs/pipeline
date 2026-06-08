@@ -1,0 +1,79 @@
+{
+  "name": "Atlas Basic",
+  "description": "Creates a MongoDB Atlas cluster with a single ReplicaSet, suitable for basic testing or development environments.",
+  "version": "1.0.0",
+  "engine": "1.0.0",
+  "release": "20250704",
+  "requires": [
+    {
+      "key": "MongoDBAtlasPublicKey",
+      "provider": "atlas",
+      "type": "credential",
+      "description": "Your MongoDB Atlas Public API Key"
+    },
+    {
+      "key": "MongoDBAtlasPrivateKey",
+      "provider": "atlas",
+      "type": "credential",
+      "description": "Your MongoDB Atlas Private API Key"
+    },
+    {
+      "key": "MongoDBAtlasProjectId",
+      "provider": "atlas",
+      "type": "config",
+      "description": "Your MongoDB Atlas Project ID"
+    }
+  ],
+  "deploymentMode": "synchronous",
+  "components": [
+    {
+      "name": "Atlas",
+      "region": "US_EAST_1",
+      "clusterType": "REPLICASET",
+      "replicationSpecs": [
+        {
+          "numShards": 1,
+          "regionsConfigs": [
+            {
+              "regionName": "US_EAST_1",
+              "electableNodes": 3,
+              "priority": 7,
+              "readOnlyNodes": 0
+            }
+          ]
+        }
+      ],
+      "secrets": {
+        "provider": "aws",
+        "keys": [
+          {
+            "key": "mongodbatlas.publicKey",
+            "description": "MongoDB Atlas Public API Key"
+          },
+          {
+            "key": "mongodbatlas:privateKey"
+          }
+        ]
+      },
+      "cloudBackup": true,
+      "autoScalingDiskGbEnabled": true,
+      "mongoDbMajorVersion": "8.0",
+      "providerName": "AWS",
+      "providerInstanceSizeName": "M10",
+      "labels": [
+        { "key": "environment", "value": "dev" },
+        { "key": "project", "value": "basic-test" }
+      ],
+      "output": [
+        {
+          "name": "atlasConnectionUrl",
+          "description": "MongoDB Atlas connection string"
+        },
+        {
+          "name": "atlasPublicIp",
+          "description": "Public IP addresses of Atlas cluster nodes"
+        }
+      ]
+    }
+  ]
+}
