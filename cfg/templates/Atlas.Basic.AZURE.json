@@ -1,0 +1,18 @@
+{
+    "name": "kozen-test-cluster",
+    "clusterType": "REPLICASET",
+    "replicationSpecs": [{
+        "numShards": 1,
+        "regionsConfigs": [{
+            "regionName": "US_EAST",
+            "electableNodes": 3,
+            "priority": 7,
+            "readOnlyNodes": 0
+        }]
+    }],
+    "cloudBackup": true,
+    "autoScalingDiskGbEnabled": true,
+    "mongoDbMajorVersion": "8.0",
+    "providerName": "AZURE",
+    "providerInstanceSizeName": "M10"
+}

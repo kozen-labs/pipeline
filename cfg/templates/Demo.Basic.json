@@ -1,0 +1,78 @@
+{
+  "name": "Demo Basic",
+  "description": "Deploys two independent Kubernetes applications: a 'frontend-app' and a 'backend-api', each with its own deployment and service.",
+  "version": "1.0.0",
+  "engine": "1.0.0",
+  "release": "20250704",
+  "requires": [
+    {
+      "key": "kubeconfig",
+      "provider": "kubernetes",
+      "type": "config",
+      "description": "Kubernetes cluster configuration (kubeconfig) for deployment target"
+    },
+    {
+      "key": "dockerHubUsername",
+      "provider": "docker",
+      "type": "credential",
+      "description": "Docker Hub username for image pulls"
+    }
+  ],
+  "deploymentMode": "asynchronous",
+  "components": [
+    {
+      "name": "Kubernetes",
+      "componentId": "frontend-app-deployment",
+      "region": "us-west-2",
+      "providerName": "EKS",
+      "kubernetesResourceType": "Deployment",
+      "namespace": "default",
+      "replicas": 2,
+      "image": "nginx:latest",
+      "containerPort": 80,
+      "serviceType": "LoadBalancer",
+      "labels": {
+        "app": "frontend-app",
+        "tier": "web"
+      },
+      "envVariables": [
+        { "name": "API_URL", "value": "http://backend-api-service" }
+      ],
+      "output": [
+        {
+          "name": "frontendServiceIp",
+          "description": "Public IP address of the frontend service"
+        }
+      ]
+    },
+    {
+      "name": "Kubernetes",
+      "componentId": "backend-api-deployment",
+      "region": "us-west-2",
+      "providerName": "EKS",
+      "kubernetesResourceType": "Deployment",
+      "namespace": "default",
+      "replicas": 3,
+      "image": "myregistry/backend-api:v1.0.0",
+      "containerPort": 5000,
+      "serviceType": "ClusterIP",
+      "labels": {
+        "app": "backend-api",
+        "tier": "api"
+      },
+      "envVariables": [
+        { "name": "DB_CONNECTION_STRING", "valueFromSecret": "my-db-secret" }
+      ],
+      "resourceLimits": {
+        "cpu": "500m",
+        "memory": "512Mi"
+      },
+      "output": [
+        {
+          "name": "backendServiceDns",
+          "description": "Internal DNS name of the backend service"
+        }
+      ]
+    }
+  ]
+}

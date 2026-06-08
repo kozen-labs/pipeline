@@ -1,0 +1,157 @@
+{
+  "pipeline:stack:manager": {
+    "target": "StackManager",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../services",
+    "args": [
+      {
+        "workspace": {
+          "url": "s3://kozen-pulumi-stacks",
+          "runtime": "nodejs"
+        }
+      }
+    ],
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "pipeline:stack:manager:node": {
+    "target": "StackManagerNode",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../services",
+    "args": [null],
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "pipeline:stack:manager:pulumi": {
+    "target": "StackManagerPulumi",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../services",
+    "args": [null],
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "pipeline:manager": {
+    "target": "PipelineManager",
+    "type": "class",
+    "lifetime": "singleton",
+    "path": "../services",
+    "args": [null],
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" },
+      { "key": "envSrv", "target": "Env", "type": "ref" }
+    ]
+  },
+  "core:processor": {
+    "category": "core",
+    "target": "ProcessorService",
+    "type": "class",
+    "lifetime": "singleton",
+    "path": "../services",
+    "args": [{}],
+    "dependencies": [
+      { "key": "srvSecret", "target": "secret:manager", "type": "ref" },
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "Atlas": {
+    "target": "Atlas",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../components/Atlas",
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "EKS": {
+    "target": "K8AwsEks",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../components/EKS",
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "ECR": {
+    "target": "ECR",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../components/ECR",
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "K8Pods": {
+    "target": "K8Pods",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../components/K8Pods",
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "Docker": {
+    "target": "Docker",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../components/Docker",
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "CLI": {
+    "target": "CLI",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../components/CLI",
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "API": {
+    "target": "API",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../components/API",
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "DemoFirst": {
+    "target": "DemoFirst",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../components/DemoFirst",
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  },
+  "DemoSecond": {
+    "target": "DemoSecond",
+    "type": "class",
+    "lifetime": "transient",
+    "path": "../components/DemoSecond",
+    "dependencies": [
+      { "key": "assistant", "target": "IoC", "type": "ref" },
+      { "key": "logger", "target": "logger:service", "type": "ref" }
+    ]
+  }
+}

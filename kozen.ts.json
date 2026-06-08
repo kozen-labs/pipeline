@@ -1,0 +1,11 @@
+{
+  "modules": {
+    "load": [
+      {
+        "name": "pipeline",
+        "target": "C:\\data\\dev\\opensource\\pipeline\\src"
+      }
+    ]
+  }
+}
+

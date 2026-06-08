@@ -1,0 +1,66 @@
+{
+  "name": "@kozen/pipeline",
+  "version": "1.0.0",
+  "description": "IaC pipeline management module for the Kozen framework — declarative JSON templates, Pulumi and Node.js orchestration, CLI and MCP interfaces.",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist/*",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "publish": "npm publish --access public",
+    "clean": "rm -rf dist",
+    "mcp:start": "ts-node node_modules/@kozen/engine/dist/bin/kozen.js --type=mcp",
+    "mcp:dev": "ts-node node_modules/@kozen/engine/dist/bin/kozen.js --type=mcp --config=kozen.ts.json",
+    "versions": "npm version patch && npm publish --access public",
+    "start": "npm run bin:kozen:js --config=kozen.js.json",
+    "dev": "npm run bin:kozen:ts --config=kozen.ts.json",
+    "build": "tsc && npm run copy:txt",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "copy:txt": "copyfiles -u 1 src/**/*.txt dist/",
+    "bin:kozen:ts": "ts-node node_modules/@kozen/engine/dist/bin/kozen.js",
+    "bin:kozen:js": "npx kozen"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kozen-labs/pipeline.git"
+  },
+  "keywords": [
+    "kozen",
+    "pipeline",
+    "iac",
+    "infrastructure-as-code",
+    "pulumi",
+    "atlas"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Kozen Labs",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/kozen-labs/pipeline/issues"
+  },
+  "homepage": "https://github.com/kozen-labs/pipeline/wiki",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@kozen/engine": "^1.1.15",
+    "@pulumi/pulumi": "^3.0.0",
+    "@pulumi/mongodbatlas": "^3.0.0",
+    "@pulumi/aws": "^6.0.0",
+    "@pulumi/eks": "^3.0.0",
+    "@pulumi/kubernetes": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.127",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "ts-node": "^10.9.0",
+    "tslint": "^6.1.3",
+    "typescript": "^5.0.0"
+  }
+}

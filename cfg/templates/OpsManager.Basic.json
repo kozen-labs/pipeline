@@ -1,0 +1,140 @@
+{
+  "name": "OpsManager Basic",
+  "description": "Deploys MongoDB Enterprise Advanced Ops Manager and a simple MongoDB Replica Set on Kubernetes. This provides a managed MongoDB cluster with full monitoring and management capabilities via Ops Manager.",
+  "version": "1.0.0",
+  "engine": "1.0.0",
+  "release": "20250704",
+  "requires": [
+    {
+      "key": "kubeconfig",
+      "provider": "kubernetes",
+      "type": "config",
+      "description": "Kubernetes cluster configuration (kubeconfig) for deployment target."
+    },
+    {
+      "key": "dockerRegistrySecret",
+      "provider": "kubernetes",
+      "type": "secret",
+      "description": "Kubernetes secret for pulling MongoDB Enterprise images (e.g., from Docker Hub or a private registry)."
+    },
+    {
+      "key": "opsManagerLicenseKey",
+      "provider": "secret",
+      "type": "string",
+      "description": "Your MongoDB Ops Manager license key."
+    }
+  ],
+  "deploymentMode": "synchronous",
+  "components": [
+    {
+      "name": "Kubernetes",
+      "componentId": "opsmanager-backend-db",
+      "region": "us-east-1",
+      "providerName": "EKS",
+      "kubernetesResourceType": "ReplicaSet",
+      "namespace": "ops-manager",
+      "replicas": 3,
+      "image": "mongodb/mongodb-enterprise-database:7.0.9",
+      "containerPort": 27017,
+      "serviceType": "ClusterIP",
+      "labels": {
+        "app": "opsmanager-backend-db"
+      },
+      "envVariables": [
+        {
+          "name": "MONGO_INITDB_ROOT_USERNAME",
+          "valueFromSecret": "opsmanager-db-credentials",
+          "secretKey": "username"
+        },
+        {
+          "name": "MONGO_INITDB_ROOT_PASSWORD",
+          "valueFromSecret": "opsmanager-db-credentials",
+          "secretKey": "password"
+        }
+      ],
+      "storageClass": "gp2",
+      "storageSizeGb": 10,
+      "output": [
+        {
+          "name": "backendDbConnectionUri",
+          "description": "Connection URI for the Ops Manager backend database"
+        }
+      ]
+    },
+    {
+      "name": "Kubernetes",
+      "componentId": "opsmanager-application",
+      "region": "us-east-1",
+      "providerName": "EKS",
+      "kubernetesResourceType": "Deployment",
+      "namespace": "ops-manager",
+      "replicas": 1,
+      "image": "mongodb/mongodb-opsmanager:7.0.9",
+      "containerPort": 8080,
+      "serviceType": "LoadBalancer",
+      "labels": {
+        "app": "opsmanager-application"
+      },
+      "envVariables": [
+        {
+          "name": "OM_SERVER_URL",
+          "value": "http://opsmanager-application-service:8080"
+        },
+        { "name": "OM_DATA_DIR", "value": "/data/om" },
+        { "name": "OM_DB_URI", "valueFromInput": "backendDbConnectionUri" },
+        {
+          "name": "OM_LIC_KEY",
+          "valueFromSecret": "opsmanager-license",
+          "secretKey": "license-key"
+        }
+      ],
+      "input": [
+        {
+          "name": "backendDbConnectionUri",
+          "description": "Input from opsmanager-backend-db component"
+        }
+      ],
+      "output": [
+        {
+          "name": "opsManagerPublicUrl",
+          "description": "Public URL for accessing the Ops Manager UI"
+        }
+      ]
+    },
+    {
+      "name": "Kubernetes",
+      "componentId": "managed-mongodb-replica-set",
+      "region": "us-east-1",
+      "providerName": "EKS",
+      "kubernetesResourceType": "ReplicaSet",
+      "namespace": "managed-db",
+      "replicas": 3,
+      "image": "mongodb/mongodb-enterprise-database:7.0.9",
+      "containerPort": 27017,
+      "serviceType": "ClusterIP",
+      "labels": {
+        "app": "managed-mongodb"
+      },
+      "envVariables": [
+        {
+          "name": "MONGO_INITDB_ROOT_USERNAME",
+          "valueFromSecret": "managed-db-credentials",
+          "secretKey": "username"
+        },
+        {
+          "name": "MONGO_INITDB_ROOT_PASSWORD",
+          "valueFromSecret": "managed-db-credentials",
+          "secretKey": "password"
+        }
+      ],
+      "storageClass": "gp2",
+      "storageSizeGb": 20,
+      "output": [
+        {
+          "name": "managedDbConnectionUri",
+          "description": "Connection URI for the managed MongoDB replica set"
+        }
+      ]
+    }
+  ]
+}
