@@ -49,6 +49,8 @@
   },
   "dependencies": {
     "@kozen/engine": "^1.1.15",
+    "@kozen/template": "^1.0.2",
+    "@kozen/secret": "^1.0.4",
     "@pulumi/pulumi": "^3.0.0",
     "@pulumi/mongodbatlas": "^3.0.0",
     "@pulumi/aws": "^6.0.0",
