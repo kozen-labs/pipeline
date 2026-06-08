@@ -1,5 +1,5 @@
 {
-  "name": "@mongodb-solution-assurance/kozen-secret",
+  "name": "@kozen/pipeline",
   "version": "1.0.0",
   "description": "Module for the Kozen framework that provides support for key vault secret managers.",
   "main": "dist/src/index.js",
@@ -10,17 +10,19 @@
     "README.md"
   ],
   "scripts": {
+    "publish": "npm publish --access public",
+    "mcp:start": "ts-node bin/kozen.ts --type=mcp",
     "start": "npm run bin:kozen:js --config=kozen.js.json",
     "dev": "npm run bin:kozen:ts --config=kozen.ts.json",
     "build": "tsc && npm run copy:txt",
     "test": "echo \"Error: no test specified\" && exit 1",
     "copy:txt": "copyfiles -u 1 src/**/*.txt dist/",
-    "bin:kozen:ts": "ts-node node_modules/@mongodb-solution-assurance/kozen/dist/bin/kozen.js",
+    "bin:kozen:ts": "ts-node node_modules/@kozen/engine/dist/bin/kozen.js",
     "bin:kozen:js": "npx kozen"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mongodb-industry-solutions/kozen-secret.git"
+    "url": "git+https://github.com/kozen-labs/pipeline.git"
   },
   "keywords": [
     "kozen",
@@ -28,18 +30,18 @@
     "secret manager",
     "key vault"
   ],
-  "author": "MongoDB Solutions Assurance Team",
-  "license": "ISC",
+  "author": "Kozen Labs",
+  "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/mongodb-industry-solutions/kozen-secret/issues"
+    "url": "https://github.com/kozen-labs/pipeline/issues"
   },
-  "homepage": "https://github.com/mongodb-industry-solutions/kozen-secret#readme",
+  "homepage": "https://github.com/kozen-labs/pipeline/wiki",
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.917.0",
-    "@mongodb-solution-assurance/kozen": "^1.1.6",
+    "@kozen/engine": "^1.1.15",
     "mongodb": "^6.17.0",
     "mongodb-client-encryption": "^6.5.0"
   },

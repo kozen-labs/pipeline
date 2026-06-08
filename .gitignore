@@ -136,7 +136,7 @@ dist
 .claude
 CLAUDE*
 tmp/*
-
+package-lock.json
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

@@ -3,7 +3,7 @@
     "load": [
       {
         "name": "secret",
-        "target": "C:\\data\\dev\\kozen-secret"
+        "target": "C:\\data\\dev\\opensource\\pipeline"
       }
     ]
   }
