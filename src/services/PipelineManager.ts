@@ -1,13 +1,7 @@
 import * as fs from 'fs';
-import { IComponent, ITransformFn } from '../../../shared/models/Component';
-import { IConfig } from '../../../shared/models/Config';
-import { IController } from '../../../shared/models/Controller';
-import { IResult } from '../../../shared/models/Result';
-import { IAction, IStruct, VCategory } from "../../../shared/models/Types";
-import { BaseService } from '../../../shared/services/BaseService';
-import { Env, IEnv, IIoC, IoC } from "../../../shared/tools";
-import { ILogger } from '../../../shared/tools/log/types';
-import { ITemplate, ITemplateManager } from '../../template/models/Template';
+import { IComponent, ITransformFn, IConfig, IResult, IAction, IStruct, VCategory, Env, IEnv, IIoC, IoC, ILogger } from '@kozen/engine';
+import { IController } from '../models/Controller';
+import { ITemplate, ITemplateManager } from '../models/Template';
 import { IPipeline, IPipelineArgs } from '../models/Pipeline';
 import { IStackManager } from '../models/Stack';
 import { PipelineService } from './BaseService';
@@ -72,6 +66,13 @@ export class PipelineManager extends PipelineService {
             this.config?.dependencies && await this.assistant.register(this.config.dependencies);
             this.logger = this.logger || await this.assistant.resolve<ILogger>('logger:service');
             this.envSrv = this.envSrv || new Env({ logger: this.logger as unknown as Console });
+            const tmplManager = await this.assistant.resolve('template:manager');
+            if (!tmplManager) {
+                throw new Error(
+                    "PipelineManager requires a 'template:manager' token registered in IoC. " +
+                    "Register an ITemplateManager implementation before loading @kozen/pipeline."
+                );
+            }
             return this;
         } catch (error) {
             throw new Error(`Failed to configure pipeline: ${error instanceof Error ? error.message : String(error)}`);
@@ -136,7 +137,7 @@ export class PipelineManager extends PipelineService {
                 }
             },
             init: async (stack) => {
-                let configs = null;
+                let configs: IResult | null = null;
                 if (template.stack?.components) {
                     configs = await this.process({
                         pipeline,
@@ -148,7 +149,7 @@ export class PipelineManager extends PipelineService {
                 return configs?.output || {};
             },
             end: async () => {
-                let configs = null;
+                let configs: IResult | null = null;
                 if (template.stack?.components) {
                     configs = await this.process({
                         pipeline,
@@ -297,12 +298,29 @@ export class PipelineManager extends PipelineService {
      */
     public async destroy(pipeline: IPipelineArgs): Promise<IResult> {
         const { template: templateName, action, project, stack: name } = pipeline;
+        if (!this.assistant) {
+            throw new Error("Incorrect dependency injection configuration.");
+        }
+        const id = this.getId(pipeline as any);
+        const stackAdm = await this.assistant.resolve<IStackManager>("pipeline:stack:manager");
+        let orchestrator = "Pulumi";
+        let stackOpts: any = {};
+        if (templateName) {
+            const srvTemplate = await this.assistant.resolve<ITemplateManager>("template:manager");
+            const template = await srvTemplate.load<ITemplate>(templateName, { flow: id });
+            orchestrator = template.stack?.orchestrator || "Pulumi";
+            stackOpts = template.stack || {};
+        }
+        const stackResult = await stackAdm.undeploy({ id, name, project, orchestrator, ...stackOpts });
         return {
             templateName,
             action: action as IAction,
-            success: true,
-            message: `Pipeline ${templateName} undeployed successfully.`,
+            success: !!stackResult?.success,
+            stackName: name,
+            projectName: project,
+            message: stackResult?.message || `Stack ${name} destroyed.`,
             timestamp: new Date(),
+            results: [stackResult],
         };
     }
 
@@ -316,11 +334,31 @@ export class PipelineManager extends PipelineService {
      */
     public async validate(pipeline: IPipelineArgs): Promise<IResult> {
         const { template: templateName, action, project, stack: name } = pipeline;
+        if (!this.assistant) {
+            throw new Error("Incorrect dependency injection configuration.");
+        }
+        const id = this.getId(pipeline as any);
+        const errors: string[] = [];
+        if (!templateName) {
+            return { templateName, action: action as IAction, success: false, errors: ['Template name is required'], timestamp: new Date() };
+        }
+        const srvTemplate = await this.assistant.resolve<ITemplateManager>("template:manager");
+        const template = await srvTemplate.load<ITemplate>(templateName, { flow: id });
+        for (const component of (template.stack?.components || [])) {
+            try {
+                await this.assistant.resolve(component.name!);
+            } catch {
+                errors.push(`Component IoC token not found: ${component.name}`);
+            }
+        }
         return {
             templateName,
             action: action as IAction,
-            success: true,
-            message: `Pipeline ${templateName} configuration is valid.`,
+            success: errors.length === 0,
+            errors,
+            message: errors.length === 0
+                ? `Template ${templateName} is valid.`
+                : `Template ${templateName} has ${errors.length} validation error(s).`,
             timestamp: new Date(),
         };
     }
@@ -335,12 +373,28 @@ export class PipelineManager extends PipelineService {
      */
     public async status(pipeline: IPipelineArgs): Promise<IResult> {
         const { template: templateName, action, project, stack: name } = pipeline;
+        if (!this.assistant) {
+            throw new Error("Incorrect dependency injection configuration.");
+        }
+        const id = this.getId(pipeline as any);
+        const stackAdm = await this.assistant.resolve<IStackManager>("pipeline:stack:manager");
+        let orchestrator = "Pulumi";
+        let stackOpts: any = {};
+        if (templateName) {
+            const srvTemplate = await this.assistant.resolve<ITemplateManager>("template:manager");
+            const template = await srvTemplate.load<ITemplate>(templateName, { flow: id });
+            orchestrator = template.stack?.orchestrator || "Pulumi";
+            stackOpts = template.stack || {};
+        }
+        const stackResult = await stackAdm.status({ id, name, project, orchestrator, ...stackOpts });
         return {
             templateName,
             action: action as IAction,
-            success: true,
-            message: `Pipeline ${templateName} is running.`,
+            success: !!stackResult?.success,
+            message: stackResult?.message,
+            output: stackResult?.output,
             timestamp: new Date(),
+            results: [stackResult],
         };
     }
 

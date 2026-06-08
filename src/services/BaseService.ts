@@ -1,8 +1,5 @@
-import { IOutputResult, ITransformOption } from "../models/Component";
-import { IProcessorService } from "../models/Processor";
-import { IStruct } from "../models/Types";
-import { IIoC } from "../tools";
-import { ILogger } from "../tools/log/types";
+import { BaseService, ITransformOption, IStruct } from '@kozen/engine';
+import { IOutputResult, IProcessorService } from '../models/Processor';
 
 /**
  * @fileoverview Base Service - Foundation Class for All Services

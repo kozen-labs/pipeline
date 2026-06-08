@@ -3,7 +3,7 @@
         "target": "PipelineCLIController",
         "type": "class",
         "lifetime": "transient",
-        "path": "../../../modules/pipeline/controllers",
+        "path": "../controllers",
         "dependencies": [
             {
                 "key": "assistant",

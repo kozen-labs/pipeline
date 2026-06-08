@@ -1,4 +1,4 @@
-import { IStruct } from "../../shared/models/Types";
+import { IStruct } from '@kozen/engine';
 
 export interface IAtlasConfig extends IStruct {
 

@@ -1,7 +1,5 @@
-import { IPipeline } from '../../modules/pipeline/models/Pipeline';
-import { IComponent } from "./Component";
-import { IResult } from "./Result";
-import { IStruct } from "./Types";
+import { IComponent, IResult, IStruct } from '@kozen/engine';
+import { IPipeline } from './Pipeline';
 
 export interface IController {
     /**

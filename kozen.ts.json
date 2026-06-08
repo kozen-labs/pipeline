@@ -2,7 +2,7 @@
   "modules": {
     "load": [
       {
-        "name": "secret",
+        "name": "pipeline",
         "target": "C:\\data\\dev\\opensource\\pipeline\\src"
       }
     ]

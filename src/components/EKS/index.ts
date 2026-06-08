@@ -1,8 +1,6 @@
-import { IPipeline } from '../../modules/pipeline/models/Pipeline';
-import { KzComponent } from '../../shared/controllers/KzComponent';
-import { IComponent } from '../../shared/models/Component';
-import { IResult } from '../../shared/models/Result';
-import { IStruct } from '../../shared/models/Types';
+import { IComponent, IResult, IStruct } from '@kozen/engine';
+import { KzComponent } from '../../controllers/KzComponent';
+import { IPipeline } from '../../models/Pipeline';
 import { IEksConfig } from "./IEksConfig";
 
 import * as aws from "@pulumi/aws";

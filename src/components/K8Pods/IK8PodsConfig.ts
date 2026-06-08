@@ -1,5 +1,5 @@
 import * as pulumi from '@pulumi/pulumi';
-import { IStruct } from "../../shared/models/Types";
+import { IStruct } from '@kozen/engine';
 
 export interface IK8PodsConfig extends IStruct {
   image?: string; // Container image URI

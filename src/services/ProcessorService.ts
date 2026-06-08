@@ -1,9 +1,6 @@
-import { ISecretManager } from "../../modules/secret/models/Secret";
-import { IMetadata } from "../models/Metadata";
-import { IProcessorService } from "../models/Processor";
-import { IStruct, VCategory } from "../models/Types";
-import { IIoC } from "../tools";
-import { ILogger } from "../tools/log/types";
+import { IMetadata, IStruct, VCategory, IIoC, ILogger } from '@kozen/engine';
+import { IProcessorService } from '../models/Processor';
+import { ISecretManager } from '../models/Secret';
 
 /**
  * @fileoverview Variable Processor Service - Variable Resolution Bridge Component

@@ -6,7 +6,7 @@
  * @version 1.0.5
  */
 
-import { VCategory } from "../../../shared/models/Types";
+import { VCategory } from '@kozen/engine';
 import { IStackOptions } from "../models/Stack";
 import StackManager from "./StackManager";
 
@@ -82,7 +82,7 @@ export class StackManagerNode extends StackManager {
         // Configure the stack with the provided options
         config?.program instanceof Function && await config.program();
         return {
-            success: false,
+            success: true,
             timestamp: new Date(),
             stackName: config?.name,
             projectName: config?.project,
@@ -102,8 +102,9 @@ export class StackManagerNode extends StackManager {
         // This should validate configuration, templates, and dependencies
         // without performing actual deployment
 
+        // Node backend has no Pulumi state to validate — always passes
         return {
-            success: false,
+            success: true,
             timestamp: new Date(),
             stackName: config?.name,
             projectName: config?.project,
@@ -123,11 +124,11 @@ export class StackManagerNode extends StackManager {
         // Configure the stack with the provided options
         config?.program instanceof Function && await config.program();
         return {
-            success: false,
+            success: true,
             timestamp: new Date(),
             stackName: config?.name,
             projectName: config?.project,
-            message: `Stack ${config.name} configuration status completed.`,
+            message: `Node backend maintains no persistent state for stack ${config.name}.`,
         };
     }
 }

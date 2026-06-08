@@ -1,8 +1,6 @@
-import { IPipeline } from '../../modules/pipeline/models/Pipeline';
-import { KzComponent } from '../../shared/controllers/KzComponent';
-import { IComponent } from '../../shared/models/Component';
-import { IResult } from '../../shared/models/Result';
-import { IStruct, VCategory } from '../../shared/models/Types';
+import { IComponent, IResult, IStruct, VCategory } from '@kozen/engine';
+import { KzComponent } from '../../controllers/KzComponent';
+import { IPipeline } from '../../models/Pipeline';
 import { IK8PodsConfig } from "./IK8PodsConfig";
 
 import * as kubernetes from '@pulumi/kubernetes';
@@ -88,7 +86,7 @@ export class K8Pods extends KzComponent {
 
     const appLabels = { app: resourcePrefix };
 
-    const envVars = []; // Array to hold environment variables
+    const envVars: Array<{ name: string; value: any }> = [];
 
     const {
       containerName = "app-container",

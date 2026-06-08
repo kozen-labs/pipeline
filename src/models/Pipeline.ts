@@ -1,8 +1,6 @@
-
-import { IArgs } from "../../../shared/models/Args";
-import { IIoC } from "../../../shared/tools";
-import { ITemplate } from "../../template/models/Template";
-import { IStackManager } from "./Stack";
+import { IArgs, IIoC } from '@kozen/engine';
+import { ITemplate } from './Template';
+import { IStackManager } from './Stack';
 
 /**
  * @fileoverview Pipeline configuration models for CLI arguments and deployment settings

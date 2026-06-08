@@ -1,9 +1,7 @@
 import path from 'path';
-import { IPipeline } from '../../modules/pipeline/models/Pipeline';
-import { KzComponent } from '../../shared/controllers/KzComponent';
-import { IComponent } from '../../shared/models/Component';
-import { IResult } from '../../shared/models/Result';
-import { VCategory } from '../../shared/models/Types';
+import { IComponent, IResult, VCategory } from '@kozen/engine';
+import { KzComponent } from '../../controllers/KzComponent';
+import { IPipeline } from '../../models/Pipeline';
 import { IDockerConfig } from "./IDockerConfig";
 
 export class Docker extends KzComponent {

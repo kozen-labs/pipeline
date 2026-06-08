@@ -1,11 +1,7 @@
-import { IPipeline } from '../../modules/pipeline/models/Pipeline';
-import { IComponent, ITransformOption } from '../models/Component';
+import { IComponent, ITransformOption, IResult, IStruct, IIoC, ILogger } from '@kozen/engine';
 import { IController } from '../models/Controller';
 import { IProcessorService } from '../models/Processor';
-import { IResult } from '../models/Result';
-import { IStruct } from '../models/Types';
-import { IIoC } from '../tools';
-import { ILogger } from '../tools/log/types';
+import { IPipeline } from '../models/Pipeline';
 
 /**
  * @fileoverview Kozen Component Controller - Abstract Bridge Component

@@ -6,9 +6,7 @@
  * @version 1.0.5
  */
 import { ConfigMap, Stack } from "@pulumi/pulumi/automation";
-import { IComponent, ITransformOption } from "../../../shared/models/Component";
-import { IResult } from "../../../shared/models/Result";
-import { IStruct } from "../../../shared/models/Types";
+import { IComponent, ITransformOption, IResult, IStruct } from '@kozen/engine';
 
 /**
  * Pulumi program function type for stack deployment

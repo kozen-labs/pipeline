@@ -13,10 +13,7 @@ import {
     ProjectRuntime,
     Stack
 } from "@pulumi/pulumi/automation";
-import { ITransformOption } from "../../../shared/models/Component";
-import { IMetadata } from "../../../shared/models/Metadata";
-import { IResult } from "../../../shared/models/Result";
-import { IStruct, VCategory } from "../../../shared/models/Types";
+import { ITransformOption, IMetadata, IResult, IStruct, VCategory } from '@kozen/engine';
 import { IStackConfig, IStackOptions } from "../models/Stack";
 import StackManager from "./StackManager";
 
@@ -76,6 +73,14 @@ export class StackManagerPulumi extends StackManager {
         };
 
         // Set workspace options
+        const passphrase = inputs?.PULUMI_CONFIG_PASSPHRASE || process.env.PULUMI_CONFIG_PASSPHRASE;
+        if (!passphrase) {
+            throw new Error(
+                "PULUMI_CONFIG_PASSPHRASE environment variable is required for the Pulumi stack manager. " +
+                "Set it via environment variable or supply it through a 'secret' input in the template."
+            );
+        }
+
         const opts: LocalWorkspaceOptions = {
             projectSettings: {
                 name: args.projectName,
@@ -83,7 +88,7 @@ export class StackManagerPulumi extends StackManager {
                 backend: { url: inputs?.PULUMI_BACKEND_URL || stack?.workspace?.url },
             },
             envVars: {
-                PULUMI_CONFIG_PASSPHRASE: inputs?.PULUMI_CONFIG_PASSPHRASE || "K0Z3N-IsSoSecure",
+                PULUMI_CONFIG_PASSPHRASE: passphrase,
                 ...inputs
             }
         };

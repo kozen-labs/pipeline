@@ -1,9 +1,7 @@
 import { exec } from 'child_process';
-import { IPipeline } from '../../modules/pipeline/models/Pipeline';
-import { KzComponent } from '../../shared/controllers/KzComponent';
-import { IComponent } from '../../shared/models/Component';
-import { IResult } from '../../shared/models/Result';
-import { IStruct, VCategory } from '../../shared/models/Types';
+import { IComponent, IResult, IStruct, VCategory } from '@kozen/engine';
+import { KzComponent } from '../../controllers/KzComponent';
+import { IPipeline } from '../../models/Pipeline';
 
 /**
  * CLI Component Controller for executing commands in the CLI

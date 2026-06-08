@@ -14,14 +14,7 @@
  */
 import * as fs from 'fs';
 import path from 'path';
-import { CLIController } from '../../../applications/cli/controllers/CLIController';
-import { IArgs } from '../../../shared/models/Args';
-import { IConfig } from '../../../shared/models/Config';
-import { IResult } from '../../../shared/models/Result';
-import { IAction, VCategory } from '../../../shared/models/Types';
-import { FileService } from '../../../shared/services/FileService';
-import { IIoC } from '../../../shared/tools';
-import { ILogger } from '../../../shared/tools/log/types';
+import { CLIController, IArgs, IConfig, IResult, IAction, VCategory, FileService, IIoC, ILogger } from '@kozen/engine';
 import { IPipelineArgs } from '../models/Pipeline';
 import { PipelineManager } from '../services/PipelineManager';
 
@@ -46,7 +39,7 @@ import { PipelineManager } from '../services/PipelineManager';
  * const result = await controller.execute(args);
  * ```
  */
-export class PipelineController extends CLIController {
+export class PipelineCLIController extends CLIController {
 
   /**
    * Pipeline manager service instance

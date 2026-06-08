@@ -1,9 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
 import { z } from "zod";
-import { MCPController } from "../../../applications/mcp/controllers/MCPController";
-import { ITemplateManager } from "../../template/models/Template";
+import { MCPController } from '@kozen/engine';
+import { ITemplateManager } from '../models/Template';
 
-export class PipelineController extends MCPController {
+export class PipelineMCPController extends MCPController {
 
     public async register(server: McpServer): Promise<void> {
         // select templates

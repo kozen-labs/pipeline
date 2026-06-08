@@ -6,12 +6,7 @@
  * @version 1.0.5
  */
 
-import { ITransformOption } from "../../../shared/models/Component";
-import { IResult } from "../../../shared/models/Result";
-import { IStruct, VCategory } from "../../../shared/models/Types";
-import { BaseService } from "../../../shared/services/BaseService";
-import { IIoC } from "../../../shared/tools";
-import { ILogger } from "../../../shared/tools/log/types";
+import { ITransformOption, IResult, IStruct, VCategory, IIoC, ILogger } from '@kozen/engine';
 import { IStackManager, IStackOptions } from "../models/Stack";
 import { PipelineService } from "./BaseService";
 
