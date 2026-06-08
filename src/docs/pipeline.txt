@@ -52,7 +52,7 @@ Environment Variables:
     KOZEN_STACK                     Default value assigned to the --stack property
     KOZEN_PROJECT                   Default value assigned to the --project property
 
-    KOZEN_TEMPLATE                  Default value assigned to the --stack property
+    KOZEN_TEMPLATE                  Default value assigned to the --template property
 
 Common Templates:
     atlas.basic                     MongoDB Atlas cluster deployment
