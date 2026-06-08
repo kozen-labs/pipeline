@@ -1,0 +1,10 @@
+{
+  "modules": {
+    "load": [
+      {
+        "name": "secret",
+        "target": "C:\\data\\dev\\kozen-secret"
+      }
+    ]
+  }
+}
